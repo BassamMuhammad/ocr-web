@@ -11,7 +11,8 @@ function App() {
   const takePic = () => {
     if (!cameraRef.current) return;
     setLoading(true);
-    const img = cameraRef.current.getScreenshot();
+    const img = new Image();
+    img.src = cameraRef.current.getScreenshot();
     Tesseract.recognize(img, "eng", {
       logger: (m) => {
         setProgress(Math.floor(m.progress * 100));
