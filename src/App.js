@@ -1,23 +1,70 @@
-import logo from './logo.svg';
-import './App.css';
+import { useRef, useState } from "react";
+import Webcam from "react-webcam";
+import Tesseract from "tesseract.js";
 
 function App() {
+  const cameraRef = useRef();
+  const [text, setText] = useState("");
+  const [progress, setProgress] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  const takePic = () => {
+    if (!cameraRef.current) return;
+    setLoading(true);
+    const img = cameraRef.current.getScreenshot();
+    Tesseract.recognize(img, "eng", {
+      logger: (m) => {
+        setProgress(Math.floor(m.progress * 100));
+      },
+    }).then(({ data }) => {
+      setLoading(false);
+      if (data.text.length === 0) alert("No text found");
+      setText(data.text);
+    });
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <div style={{ position: "relative" }}>
+          <Webcam ref={cameraRef} screenshotFormat="image/jpeg" />
+
+          {loading ? (
+            <progress
+              style={{
+                position: "absolute",
+                bottom: "10%",
+                left: "50%",
+              }}
+              value={progress}
+              max="100"
+            />
+          ) : (
+            <button
+              onClick={takePic}
+              style={{
+                position: "absolute",
+                bottom: "10%",
+                left: "50%",
+                backgroundColor: "gray",
+                cursor: "pointer",
+                width: "50px",
+                height: "50px",
+                borderRadius: "50%",
+                borderColor: "gray",
+              }}
+            ></button>
+          )}
+        </div>
+
+        {text.length > 0 && <p style={{ margin: "5%" }}>{text}</p>}
+      </div>
     </div>
   );
 }
