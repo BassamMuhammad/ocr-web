@@ -71,7 +71,7 @@ function App() {
         </div>
 
         {text.length > 0 && <p style={{ margin: "5%" }}>{text}</p>}
-        <img src="" ref={canvasRef} />
+        <img src="" ref={canvasRef} alt="ocr" />
       </div>
     </div>
   );

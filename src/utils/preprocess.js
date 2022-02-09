@@ -2,6 +2,7 @@ export async function preprocessImage(img) {
   const canvas = document.createElement("canvas");
   const image = document.createElement("img");
   image.src = img;
+  image.alt = "ocr";
   canvas.width = 500;
   canvas.height = 500;
   image.onload = function () {
