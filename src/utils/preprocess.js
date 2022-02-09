@@ -17,7 +17,7 @@ export async function preprocessImage(img) {
     blurARGB(processedImageData.data, canvas, 1);
     // dilate(processedImageData.data, canvas);
     // invertColors(processedImageData.data);
-    thresholdFilter(processedImageData.data, 0.5);
+    thresholdFilter(processedImageData.data, 0.45);
     ctx.putImageData(processedImageData, 0, 0);
   };
   await new Promise((r) => setTimeout(r, 1000));
