@@ -1,9 +1,10 @@
 import { useRef, useState } from "react";
 import Webcam from "react-webcam";
 import Tesseract from "tesseract.js";
-
+import { preprocessImage } from "./utils/preprocess";
 function App() {
   const cameraRef = useRef();
+  const canvasRef = useRef();
   const [text, setText] = useState("");
   const [progress, setProgress] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -12,9 +13,12 @@ function App() {
     if (!cameraRef.current) return;
     setLoading(true);
     const b64Img = cameraRef.current.getScreenshot();
-    const res = await fetch(b64Img);
+    const img = await preprocessImage(b64Img);
+    const res = await fetch(img);
     const blob = await res.blob();
     const blobUrl = URL.createObjectURL(blob);
+    canvasRef.current.src = blobUrl;
+    console.log(blobUrl);
     Tesseract.recognize(blobUrl, "eng", {
       logger: (m) => {
         setProgress(Math.floor(m.progress * 100));
@@ -67,6 +71,7 @@ function App() {
         </div>
 
         {text.length > 0 && <p style={{ margin: "5%" }}>{text}</p>}
+        <img src="" ref={canvasRef} />
       </div>
     </div>
   );
