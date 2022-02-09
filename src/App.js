@@ -4,7 +4,8 @@ import Tesseract from "tesseract.js";
 import { preprocessImage } from "./utils/preprocess";
 function App() {
   const cameraRef = useRef();
-  const canvasRef = useRef();
+  const imgRef = useRef();
+  const [cameraDirection, setCameraDirection] = useState("user");
   const [text, setText] = useState("");
   const [progress, setProgress] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -17,7 +18,7 @@ function App() {
     const res = await fetch(img);
     const blob = await res.blob();
     const blobUrl = URL.createObjectURL(blob);
-    canvasRef.current.src = blobUrl;
+    imgRef.current.src = blobUrl;
     console.log(blobUrl);
     Tesseract.recognize(blobUrl, "eng", {
       logger: (m) => {
@@ -40,7 +41,11 @@ function App() {
         }}
       >
         <div style={{ position: "relative" }}>
-          <Webcam ref={cameraRef} screenshotFormat="image/jpeg" />
+          <Webcam
+            videoConstraints={{ facingMode: cameraDirection }}
+            ref={cameraRef}
+            screenshotFormat="image/jpeg"
+          />
 
           {loading ? (
             <progress
@@ -69,9 +74,16 @@ function App() {
             ></button>
           )}
         </div>
-
+        <button
+          onClick={() => {
+            if (cameraDirection === "user") setCameraDirection("environment");
+            else setCameraDirection("user");
+          }}
+        >
+          Change Camera Direction
+        </button>
         {text.length > 0 && <p style={{ margin: "5%" }}>{text}</p>}
-        <img src="" ref={canvasRef} alt="ocr" />
+        <img src="" ref={imgRef} alt="ocr" />
       </div>
     </div>
   );

@@ -16,7 +16,7 @@ export async function preprocessImage(img) {
     );
     blurARGB(processedImageData.data, canvas, 1);
     dilate(processedImageData.data, canvas);
-    invertColors(processedImageData.data);
+    // invertColors(processedImageData.data);
     thresholdFilter(processedImageData.data, 0.4);
     ctx.putImageData(processedImageData, 0, 0);
   };
