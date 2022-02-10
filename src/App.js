@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import Webcam from "react-webcam";
 import Tesseract from "tesseract.js";
-import { preprocessImage } from "./utils/preprocess";
+// import { preprocessImage } from "./utils/preprocess";
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 function App() {
@@ -60,12 +60,12 @@ function App() {
         crop,
         "newFile.jpeg"
       );
-      const img = await preprocessImage(croppedImageUrl);
-      const res = await fetch(img);
-      const blob = await res.blob();
-      const blobUrl = URL.createObjectURL(blob);
-      setCroppedImageUrl(blobUrl);
-      Tesseract.recognize(blobUrl, "eng", {
+      // const img = await preprocessImage(croppedImageUrl);
+      // const res = await fetch(img);
+      // const blob = await res.blob();
+      // const blobUrl = URL.createObjectURL(blob);
+      // setCroppedImageUrl(blobUrl);
+      Tesseract.recognize(croppedImageUrl, "eng", {
         logger: (m) => {
           setProgress(Math.floor(m.progress * 100));
         },
