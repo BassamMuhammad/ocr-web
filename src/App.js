@@ -64,7 +64,7 @@ function App() {
       // const res = await fetch(img);
       // const blob = await res.blob();
       // const blobUrl = URL.createObjectURL(blob);
-      // setCroppedImageUrl(blobUrl);
+      setCroppedImageUrl(croppedImageUrl);
       Tesseract.recognize(croppedImageUrl, "eng", {
         logger: (m) => {
           setProgress(Math.floor(m.progress * 100));
